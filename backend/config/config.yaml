@@ -3,11 +3,11 @@ app:
   port: :3000
 
 database:
-  dsn: root:1234@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=True&loc=Local
+  dsn: root:1234@tcp(192.168.16.2:3306)/test?charset=utf8mb4&parseTime=True&loc=Local
   MaxIdleConns: 11
   MaxOpenCons: 114
 
 redis:
-  addr: localhost:6379
+  addr: 192.168.16.3:6379
   DB: 0
   Password: ""

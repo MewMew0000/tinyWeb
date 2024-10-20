@@ -1,2 +1,2 @@
 #!/bin/bash
-docker stop tinyWebSql
+docker-compose down

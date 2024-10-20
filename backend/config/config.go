@@ -26,9 +26,7 @@ type Config struct {
 var AppConfig *Config
 
 func InitConfig() {
-	viper.AddConfigPath("./config")
-	viper.SetConfigType("yaml")
-	viper.SetConfigName("config")
+	viper.SetConfigFile("/app/config.yaml")
 	AppConfig = &Config{}
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("reading config failed: %v", err)

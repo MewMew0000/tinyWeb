@@ -1,0 +1,57 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: tinyWebSql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: test
+    networks:
+      tinyWebNet:
+        ipv4_address: 192.168.16.2
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "192.168.16.2", "-p1234" ]
+      interval: 3s
+      timeout: 2s
+      retries: 5
+
+  redis:
+    image: redis:latest
+    container_name: tinyWebRedis
+    restart: always
+    networks:
+      tinyWebNet:
+        ipv4_address: 192.168.16.3
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 2s
+      retries: 5
+
+  app:
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: backend-img
+    container_name: backend
+    restart: always
+    volumes:
+      - ./config/config.yaml:/app/config.yaml
+    networks:
+      tinyWebNet:
+        ipv4_address: 192.168.16.4
+    ports:
+      - "3000:3000"
+    command: "/app/main"
+
+networks:
+  tinyWebNet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.16.0/24
