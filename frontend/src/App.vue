@@ -17,15 +17,28 @@
         </el-menu>
       </el-header>
       <el-main>
+        <router-view></router-view>
       </el-main>
   </el-container>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router';
 
-const activeIndex = ref('home')
-const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
+const router = useRouter();
+const route = useRoute();
+const activeIndex = ref(route.name?.toString() || 'home');
+
+watch(route, (to) => {
+  activeIndex.value = to.name?.toString() || 'home';
+})
+
+const handleSelect = (key: string) => {
+  if (key == 'logout') {
+    router.push({ name: 'home' });
+  } else {
+    router.push({ name: key.charAt(0).toUpperCase() + key.slice(1) });
+  }
 }
 </script>
