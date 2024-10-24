@@ -11,9 +11,9 @@
           <el-menu-item index="home">Home</el-menu-item>
           <el-menu-item index="currencyExchange">CurrencyExchange</el-menu-item>
           <el-menu-item index="news">News</el-menu-item>
-          <el-menu-item index="login">Login</el-menu-item>
-          <el-menu-item index="register">Register</el-menu-item>
-          <el-menu-item index="logout">Logout</el-menu-item>
+          <el-menu-item index="login" v-if="!authStore.isAuthenticated">Login</el-menu-item>
+          <el-menu-item index="register" v-if="!authStore.isAuthenticated">Register</el-menu-item>
+          <el-menu-item index="logout" v-if="!authStore.isAuthenticated">Logout</el-menu-item>
         </el-menu>
       </el-header>
       <el-main>
@@ -24,8 +24,10 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
+import { useAuthStore } from './store/auth'
 import { useRouter, useRoute } from 'vue-router';
 
+const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
 const activeIndex = ref(route.name?.toString() || 'home');
@@ -36,6 +38,7 @@ watch(route, (to) => {
 
 const handleSelect = (key: string) => {
   if (key == 'logout') {
+    authStore.logout();
     router.push({ name: 'home' });
   } else {
     router.push({ name: key.charAt(0).toUpperCase() + key.slice(1) });
