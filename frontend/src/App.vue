@@ -13,7 +13,7 @@
           <el-menu-item index="news">News</el-menu-item>
           <el-menu-item index="login" v-if="!authStore.isAuthenticated">Login</el-menu-item>
           <el-menu-item index="register" v-if="!authStore.isAuthenticated">Register</el-menu-item>
-          <el-menu-item index="logout" v-if="!authStore.isAuthenticated">Logout</el-menu-item>
+          <el-menu-item index="logout">Logout</el-menu-item>
         </el-menu>
       </el-header>
       <el-main>
@@ -39,7 +39,7 @@ watch(route, (to) => {
 const handleSelect = (key: string) => {
   if (key == 'logout') {
     authStore.logout();
-    router.push({ name: 'home' });
+    router.push({ name: 'Home' });
   } else {
     router.push({ name: key.charAt(0).toUpperCase() + key.slice(1) });
   }
